@@ -1,0 +1,118 @@
+*,
+*::after,
+*::before{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* outline: 2px solid red;  */
+}
+
+body{
+    background-color: antiquewhite;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container{
+    width: 100%;
+    max-width: 1000px;
+    min-height: min-content;
+    padding: 40px;
+    outline: 2px solid red;
+}
+
+.main-menu-div{
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: url('/images/VS-background.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+h1{
+    margin-bottom: 20px;
+    padding: 10px;
+    text-align: center;
+}
+
+.display-screen{
+    display: flex;
+    
+}
+
+img{
+    height: 100px;
+    width: 100px;
+}
+
+.main-menu-div {
+    display: flex;
+    flex-direction: column;
+}
+.main-menu-div h2{
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 2rem;
+    color:rgb(73, 105, 179);
+    font-weight: 1000;
+    text-shadow: 12px 10px 10px black;
+}
+
+.choose-div{
+    display: flex;
+}
+
+.player-one-div,
+.player-two-div{
+    margin: 0 auto;
+}
+
+.player-character-div{
+    display: flex;
+}
+
+.img{
+    margin: 8px;
+    padding: 3px;
+
+    &:hover{
+        border: 5px solid green;
+        margin: 3px;
+    }
+
+    &:active{
+        border: 5px solid green;
+        margin: 3px;
+    }
+}
+
+.player-one,
+.player-two{
+    text-align: center;
+    padding: 8px;
+    font-size: 1.3rem;
+    font-weight: 800;
+}
+
+.button-div{
+    margin: 0 auto;
+    margin-top: 40px;
+    padding: 20px;
+}
+
+.start-btn{
+    font-size: 1.8rem;
+    font-weight: 800;
+    padding: 10px;
+    border: none;
+    border-radius: 14px;
+    background-color: rgb(179, 73, 73);
+}
+
