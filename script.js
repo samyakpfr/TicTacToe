@@ -1,3 +1,16 @@
+const characterDiv = document.querySelector(".player-character-div");
+const image_div_male = document.querySelectorAll(".male .img");
+const image_div_female = document.querySelectorAll(".female .img");
+const startBtn = document.querySelector(".start-btn");
+const mainMenuDiv = document.querySelector(".main-menu-div");
+const playScreen = document.querySelector(".play-screen");
+const playerOneDisplay = document.querySelector(".player-one-display");
+const playerTwoDisplay = document.querySelector(".player-two-display");
+const cells = document.querySelectorAll("[data-x]");
+const turnIndicator = document.querySelector(".turn-indicator");
+const displayError = document.querySelector(".display-error");
+
+
 function gameBoard()
 {
     let gameArr = [];
@@ -12,40 +25,46 @@ function gameBoard()
         gameArr[i] = [];
         for(let j=0; j<col; j++)
         {
-            gameArr[i][j] = 0;
+            gameArr[i][j] = {ref: undefined, available: true};
         }
     }
     }
 
     //function to add the respective player's symbol on the board
     let additionPossible = true;
-    function addSymbol(player, row, col)
+    let availablilityOfPreviousCell = true;
+    function addSymbol(attackingPlayerRef, row, col, cell)
     {
-        if(gameArr[row][col] === 0 && additionPossible)
+        if(!(gameArr[row][col].ref) && gameArr[row][col].available && additionPossible)
         {
-            gameArr[row][col] = player;
-            //player1 = 1, player2 = 2, empty = 0
+            const cellImg = cell.querySelector("img");
+            cellImg.src = attackingPlayerRef.src;
+            gameArr[row][col].ref = attackingPlayerRef; 
+            gameArr[row][col].available = false; 
+            availablilityOfPreviousCell = true; 
         }
+        else{availablilityOfPreviousCell = false;}
 
-        if(win(player, row, col) === true)
+        if(win(attackingPlayerRef, row, col) === true)
         {
-            console.log(`Player ${player} wins!`);
+            turnIndicator.textContent = attackingPlayerRef.getAttribute("alt") + " Wins!";
             //condition to stop the play
             additionPossible = false;
         }
 
         else if(draw())
         {
-            console.log("The match is a draw.");
+            turnIndicator.textContent = "It's a draw!";
             additionPossible = false;
         }
     }
 
-    function win(player, row, col)// 1 0 2
+    function win(player, row, col)
     {
-        if(gameArr[0][0] == gameArr[1][1] && gameArr[1][1] == gameArr[2][2] && gameArr[2][2] == player
-            || gameArr[0][2] == gameArr[1][1] && gameArr[1][1] == gameArr[2][0] && gameArr[2][0] == player)
+        if(gameArr[0][0].ref == gameArr[1][1].ref && gameArr[1][1].ref == gameArr[2][2].ref && gameArr[2][2].ref == player
+           || gameArr[0][2].ref == gameArr[1][1].ref && gameArr[1][1].ref == gameArr[2][0].ref && gameArr[2][0].ref == player)
         {
+            additionPossible = false;
             return true;
         }
 
@@ -53,11 +72,11 @@ function gameBoard()
         let countColumn = 0;
         for(let i=0; i<3; i++)
         {
-            if(gameArr[row][i] === player)
+            if(gameArr[row][i].ref === player)
             {
                 countRow++;
             }
-            if(gameArr[i][col] === player)
+            if(gameArr[i][col].ref === player)
             {
                 countColumn++;
             }
@@ -76,7 +95,7 @@ function gameBoard()
         {
             for(let j=0; j<col; j++)
             {
-                if(!gameArr[i][j])
+                if(!(gameArr[i][j].ref))
                 {
                     emptyCount++;
                 }
@@ -89,64 +108,105 @@ function gameBoard()
         }
     }
 
-    function displayGameArr()
+    function indicateTurn(playerName)
     {
-        console.log("------------------------------");
-        for(let i=0; i<3; i++)
+        if(additionPossible && availablilityOfPreviousCell)
         {
-            console.log(gameArr[i]);
+        turnIndicator.textContent = playerName + "'s turn";
         }
+
     }
 
-    function gameOver()
+    function getAvailabilityOfPreviousCell()
     {
-        if(!additionPossible) {
-            setBoard();
-            return true;
-    }
+        return availablilityOfPreviousCell;
     }
 
     setBoard();
-    return{displayGameArr, addSymbol, win, draw, gameOver};
+    return{addSymbol, indicateTurn, getAvailabilityOfPreviousCell};
 }
 
 (function gameController()
 {
+    let playerMale, playerFemale;
 
-    let player = 1;
-    let playerTargetCell;
-    let inputRow;
-    let inputColumn;
-    
-    let game = gameBoard();
+    image_div_male.forEach((img_div)=>{
+        img_div.addEventListener("click",(event)=>{
+            image_div_male.forEach((div)=>{
+                div.classList.remove("targeted");
+            })
+            playerMale = event.target;
+            event.currentTarget.classList.add("targeted");
+        })
+    });
 
-    while(!game.gameOver())
-    {
-        game.displayGameArr();
+    image_div_female.forEach((img_div)=>{
+        img_div.addEventListener("click",(event)=>{
+            image_div_female.forEach((div)=>{
+                div.classList.remove("targeted");
+            });
+            playerFemale = event.target;
+            event.currentTarget.classList.add("targeted");
+        })
+    });
 
-        playerTargetCell = prompt(`Player${player}'s turn:`);
-        
-        inputRow = (+playerTargetCell[0]) - 1;
-        inputColumn = (+playerTargetCell[2]) - 1;
+        let playerAttacking;
 
-        if(inputColumn > 2 || inputColumn < 0 || inputRow < 0 || inputRow > 2){
-            console.log("--------------------------------------");
-            console.log("Invalid row/column input!");
-            continue;
-        }
-        game.addSymbol(player, inputRow, inputColumn);
-        if(player == 1) 
+    startBtn.addEventListener("click", ()=>{
+        if(playerMale &&  playerFemale)
         {
-            player = 2;
+        playerAttacking = playerMale;
+        mainMenuDiv.classList.toggle("hide-display");
+        playScreen.classList.toggle("hide-display");
+
+        addAvatarAndName(playerMale, playerFemale);
+
+        turnIndicator.textContent = playerAttacking.getAttribute("alt") + "'s turn!";
+
         }
+
         else
         {
-            player = 1;
-        }
-    }
+            displayError.style.display = "block";
 
-    
-    
+            setTimeout(()=>{
+                displayError.style.display = "none";
+            }, 5000);
+        }
+    })
+
+
+    let game = gameBoard();
+
+    cells.forEach((cell)=>{
+        cell.addEventListener("click", (event)=>{
+            game.addSymbol(playerAttacking, +(cell.dataset.x) - 1, +(cell.dataset.y) - 1, cell);
+            if(game.getAvailabilityOfPreviousCell() == true)
+            {
+            playerAttacking = (playerAttacking == playerMale) ? playerFemale : playerMale;
+            }
+            game.indicateTurn(playerAttacking.getAttribute("alt"));
+        })
+    });
+
+    function addAvatarAndName(maleRef, femaleRef)
+    {
+        const playerOneImg = playerOneDisplay.querySelector("img");
+        const maleSrc = maleRef.getAttribute("src");
+        playerOneImg.setAttribute("src", maleSrc);
+
+        const playerTwoImg = playerTwoDisplay.querySelector("img");
+        const femaleSrc = femaleRef.getAttribute("src");
+        playerTwoImg.setAttribute("src", femaleSrc);
+
+        const playerOneNameSpan = playerOneDisplay.querySelector(".player-name");
+        const playerOneName = maleRef.getAttribute("alt");
+        playerOneNameSpan.textContent = playerOneName;
+
+        const playerTwoNameSpan = playerTwoDisplay.querySelector(".player-name");
+        const playerTwoName = femaleRef.getAttribute("alt");
+        playerTwoNameSpan.textContent = playerTwoName;
+    }
 })();
 
 

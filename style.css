@@ -18,7 +18,7 @@ body{
 .container{
     width: 100%;
     max-width: 1000px;
-    min-height: min-content;
+    min-height: 50vh;
     padding: 40px;
     outline: 2px solid red;
 }
@@ -34,6 +34,7 @@ body{
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
+
 }
 
 h1{
@@ -47,22 +48,22 @@ h1{
     
 }
 
-img{
+.img img{
     height: 100px;
     width: 100px;
 }
 
-.main-menu-div {
-    display: flex;
-    flex-direction: column;
-}
 .main-menu-div h2{
     margin-bottom: 10px;
     text-align: center;
     font-size: 2rem;
-    color:rgb(73, 105, 179);
+    color:rgb(95, 132, 218);
     font-weight: 1000;
     text-shadow: 12px 10px 10px black;
+}
+
+.main-menu-div.hide-display{
+    display: none;
 }
 
 .choose-div{
@@ -83,12 +84,7 @@ img{
     padding: 3px;
 
     &:hover{
-        border: 5px solid green;
-        margin: 3px;
-    }
-
-    &:active{
-        border: 5px solid green;
+        border: 5px dashed rgb(9, 127, 9);
         margin: 3px;
     }
 }
@@ -116,3 +112,105 @@ img{
     background-color: rgb(179, 73, 73);
 }
 
+.img.targeted{
+        border: 5px solid green;
+        margin: 3px;
+}
+
+/* playscreen */
+
+.play-screen{
+    min-height: 70%;
+    width: 100%;
+    background-color: aqua;
+    outline: 2px solid red;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    background: url('/images/VS-background.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+.play-screen.hide-display{
+    display: none;
+}
+
+.play-area{
+    display: flex;
+    justify-content: space-between;
+}
+
+.turn-indicator{
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin-bottom: 40px;
+}
+
+.game-board-div{
+    max-height: 400px;
+    width: 400px;
+    display: flex;  
+    flex-direction: column;
+}
+
+.game-board-div > div{
+    width: 100%; 
+    flex: 1 1 auto;
+    display: flex;
+}
+
+[data-x]{
+    width: 120px;
+    height: 120px;
+    border: 2px solid black;
+    flex: 1 1 auto;
+}
+
+[data-x] img{
+    height: 100%;
+    width: 100%;
+    background-color: aqua  ;
+}
+
+.player-one-display,
+.player-two-display{
+    outline: 2px solid red;
+    padding: 10px;
+    max-height: max-content;
+    margin: 30px;  
+
+    & .player-name{
+        font-size: 1.2rem;
+        color: red;
+        text-align: center;
+        margin-bottom: 8px;
+    }
+
+    & .image{
+        margin: 0 auto;
+        height: 150px;
+        width: 150px;
+    }
+
+    & img{
+        height: 150px;
+        width: 150px;
+    }
+}
+
+.display-error{
+    font-size: 2rem;
+    margin: 0 auto;
+    color: white;
+    font-weight: 900;
+    padding: 20px;
+}
+
+.display-error.hide-display{
+    display: none;
+}
