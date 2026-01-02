@@ -9,6 +9,9 @@ const playerTwoDisplay = document.querySelector(".player-two-display");
 const cells = document.querySelectorAll("[data-x]");
 const turnIndicator = document.querySelector(".turn-indicator");
 const displayError = document.querySelector(".display-error");
+const playerOneName = document.querySelector(".player-one");
+const playerTwoName = document.querySelector(".player-two");
+const playAgainBtn = document.querySelector("button.play-again");
 
 
 function gameBoard()
@@ -50,12 +53,14 @@ function gameBoard()
             turnIndicator.textContent = attackingPlayerRef.getAttribute("alt") + " Wins!";
             //condition to stop the play
             additionPossible = false;
+            // playAgainBtn.classList.toggle("hide-display");
         }
 
         else if(draw())
         {
             turnIndicator.textContent = "It's a draw!";
             additionPossible = false;
+            // playAgainBtn.classList.toggle("hide-display");
         }
     }
 
@@ -122,12 +127,19 @@ function gameBoard()
         return availablilityOfPreviousCell;
     }
 
+    function reset()
+    {
+        setBoard();
+    }
+
     setBoard();
-    return{addSymbol, indicateTurn, getAvailabilityOfPreviousCell};
+    return{addSymbol, indicateTurn, getAvailabilityOfPreviousCell, reset};
 }
 
 (function gameController()
 {
+
+
     let playerMale, playerFemale;
 
     image_div_male.forEach((img_div)=>{
@@ -137,6 +149,7 @@ function gameBoard()
             })
             playerMale = event.target;
             event.currentTarget.classList.add("targeted");
+            playerOneName.textContent = playerMale.getAttribute("alt");
         })
     });
 
@@ -147,12 +160,14 @@ function gameBoard()
             });
             playerFemale = event.target;
             event.currentTarget.classList.add("targeted");
+            playerTwoName.textContent = playerFemale.getAttribute("alt");
         })
     });
 
         let playerAttacking;
 
     startBtn.addEventListener("click", ()=>{
+        let game = gameBoard();
         if(playerMale &&  playerFemale)
         {
         playerAttacking = playerMale;
@@ -171,14 +186,10 @@ function gameBoard()
 
             setTimeout(()=>{
                 displayError.style.display = "none";
-            }, 5000);
+            }, 3000);
         }
-    })
 
-
-    let game = gameBoard();
-
-    cells.forEach((cell)=>{
+        cells.forEach((cell)=>{
         cell.addEventListener("click", (event)=>{
             game.addSymbol(playerAttacking, +(cell.dataset.x) - 1, +(cell.dataset.y) - 1, cell);
             if(game.getAvailabilityOfPreviousCell() == true)
@@ -188,6 +199,9 @@ function gameBoard()
             game.indicateTurn(playerAttacking.getAttribute("alt"));
         })
     });
+    });
+
+
 
     function addAvatarAndName(maleRef, femaleRef)
     {
@@ -208,6 +222,22 @@ function gameBoard()
         playerTwoNameSpan.textContent = playerTwoName;
     }
 })();
+
+    // playAgainBtn.addEventListener("click", reset);
+
+    // function reset(event)
+    // {
+    //     playScreen.classList.toggle("hide-display");
+    //     mainMenuDiv.classList.toggle("hide-display");
+
+    //         cells.forEach((cell)=>{
+    //         const cellImg = cell.querySelector("img");
+    //         cellImg.src = './images/cellBack.png';
+    //     });
+    //     gameController();
+
+
+    // }
 
 
 
