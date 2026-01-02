@@ -31,7 +31,7 @@ body{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    background: url('/images/VS-background.jpg');
+    background: url('images/VS-background.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -143,7 +143,7 @@ h1{
     align-items: center;
     display: flex;
     flex-direction: column;
-    background: url('/images/VS-background.jpg');
+    background: url('images/VS-background.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
